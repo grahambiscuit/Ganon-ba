@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ganon Ba — Simulate the Philippines of Tomorrow</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060810;
+  --surface: #0d1117;
+  --surface2: #141922;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0f2f8;
+  --muted: rgba(240,242,248,0.45);
+  --accent: #00e5a0;
+  --accent2: #7B5EF6;
+  --accent3: #FF6B35;
+  --ph-gold: #FCD116;
+  --ph-blue: #0038A8;
+  --ph-red: #CE1126;
+  --mono: 'Space Mono', 'Courier New', monospace;
+  --sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;line-height:1.6}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;transition:all .3s}
+nav.scrolled{background:rgba(6,8,16,0.92);border-color:var(--border);backdrop-filter:blur(20px)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo-mark{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.nav-logo-mark svg{width:18px;height:18px}
+.nav-logo-text{font-size:16px;font-weight:700;letter-spacing:.01em}
+.nav-logo-text span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#060810;font-size:13px;font-weight:700;padding:9px 22px;border-radius:6px;text-decoration:none;font-family:var(--sans);transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,160,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent)}
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(0,229,160,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';flex:1;max-width:40px;height:1px;background:var(--accent);opacity:.4}
+.hero-title{font-size:clamp(56px,8vw,112px);font-weight:700;line-height:.95;letter-spacing:-.03em;margin-bottom:28px}
+.hero-title .ph{color:var(--ph-gold)}
+.hero-title .future{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:560px;line-height:1.7;margin-bottom:48px;font-weight:300}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn-primary{background:var(--accent);color:#060810;font-weight:700;font-size:15px;padding:14px 32px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;font-family:var(--sans)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,229,160,0.3)}
+.btn-secondary{background:transparent;color:var(--text);font-weight:500;font-size:15px;padding:14px 32px;border-radius:8px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border2);transition:all .2s;font-family:var(--sans)}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04)}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-family:var(--mono);letter-spacing:.1em}
+.scroll-line{width:1px;height:48px;background:linear-gradient(var(--accent),transparent);animation:scrollpulse 2s ease-in-out infinite}
+@keyframes scrollpulse{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(.6)}}
+
+/* ── STATS TICKER ── */
+.stats-bar{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0;overflow:hidden;position:relative}
+.stats-track{display:flex;animation:ticker 30s linear infinite;width:max-content}
+.stats-track:hover{animation-play-state:paused}
+.stat-item{display:flex;align-items:center;gap:12px;padding:16px 48px;white-space:nowrap;border-right:1px solid var(--border)}
+.stat-num{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent)}
+.stat-label{font-size:13px;color:var(--muted)}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── SECTIONS ── */
+section{padding:120px 48px;max-width:1200px;margin:0 auto}
+.section-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.section-title{font-size:clamp(36px,4vw,56px);font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-bottom:20px}
+.section-sub{font-size:18px;color:var(--muted);max-width:560px;font-weight:300;line-height:1.7}
+
+/* ── 3D SIM PREVIEW ── */
+.sim-preview-wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 48px 120px}
+.sim-window{width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border2);position:relative;background:var(--surface)}
+.sim-titlebar{background:var(--surface2);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.sim-dot{width:12px;height:12px;border-radius:50%}
+.sim-url{flex:1;background:rgba(255,255,255,0.04);border-radius:5px;padding:5px 12px;font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 12px;text-align:center}
+#simCanvas{width:100%;height:520px;display:block;cursor:grab}
+#simCanvas:active{cursor:grabbing}
+.sim-ui-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(6,8,16,0.9));padding:24px;display:flex;justify-content:space-between;align-items:flex-end}
+.sim-scenario-btns{display:flex;gap:8px;flex-wrap:wrap}
+.sc-pill{background:rgba(255,255,255,0.08);border:1px solid var(--border2);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;padding:7px 16px;border-radius:20px;cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.sc-pill.active{background:var(--accent);color:#060810;border-color:var(--accent)}
+.sc-pill:hover:not(.active){background:rgba(255,255,255,0.14)}
+.sim-coords{font-family:var(--mono);font-size:11px;color:var(--accent);text-align:right}
+.sim-label-tag{position:absolute;top:60px;left:16px;background:rgba(0,0,0,0.75);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:#fff;pointer-events:none}
+.sim-compass{position:absolute;top:60px;right:16px;width:40px;height:40px;border-radius:50%;border:1px solid var(--border2);background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent)}
+
+/* ── FEATURES GRID ── */
+.features-full{width:100%;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.features-inner{max-width:1200px;margin:0 auto;padding:120px 48px}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:64px}
+.feat-card{background:var(--surface);padding:36px 32px;position:relative;transition:background .2s;cursor:default}
+.feat-card:hover{background:var(--surface2)}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px}
+.feat-icon.green{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2)}
+.feat-icon.purple{background:rgba(123,94,246,0.1);border:1px solid rgba(123,94,246,0.2)}
+.feat-icon.orange{background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.2)}
+.feat-icon.gold{background:rgba(252,209,22,0.1);border:1px solid rgba(252,209,22,0.2)}
+.feat-name{font-size:17px;font-weight:600;margin-bottom:10px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.7}
+.feat-tag{position:absolute;top:20px;right:20px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:4px 10px;border-radius:4px;text-transform:uppercase}
+.feat-tag.soon{background:rgba(255,107,53,0.15);color:var(--accent3);border:1px solid rgba(255,107,53,0.2)}
+.feat-tag.live{background:rgba(0,229,160,0.12);color:var(--accent);border:1px solid rgba(0,229,160,0.2)}
+
+/* ── COMPARISON SECTION ── */
+.compare-section{padding:120px 0}
+.compare-wrap{max-width:1200px;margin:0 auto;padding:0 48px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:64px;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.compare-col{padding:40px 36px}
+.compare-col.now{background:var(--surface)}
+.compare-col.future{background:linear-gradient(135deg,rgba(0,229,160,0.04),rgba(123,94,246,0.04));border-left:2px solid var(--accent)}
+.compare-head{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.compare-head.now-h{color:var(--muted)}
+.compare-head.future-h{color:var(--accent)}
+.compare-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.compare-row:last-child{border:none}
+.c-label{font-size:14px;color:var(--muted)}
+.c-val{font-family:var(--mono);font-size:16px;font-weight:700}
+.c-val.bad{color:var(--accent3)}
+.c-val.good{color:var(--accent)}
+.c-bar-wrap{margin-top:32px}
+.c-bar-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-family:var(--mono)}
+.c-bar-track{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.c-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.c-bar-fill.now{background:var(--accent3)}
+.c-bar-fill.future{background:var(--accent)}
+
+/* ── SCENARIOS SECTION ── */
+.scenarios-full{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.scenarios-inner{max-width:1200px;margin:0 auto;padding:120px 48px}
+.scenarios-list{display:flex;flex-direction:column;gap:2px;margin-top:64px}
+.scenario-row{display:grid;grid-template-columns:64px 1fr 1fr 200px;gap:0;align-items:stretch;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:2px;transition:border-color .2s;cursor:pointer}
+.scenario-row:hover{border-color:var(--border2)}
+.sc-num{background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--muted);border-right:1px solid var(--border)}
+.sc-info{padding:28px 32px;border-right:1px solid var(--border)}
+.sc-info h3{font-size:18px;font-weight:600;margin-bottom:6px}
+.sc-info p{font-size:14px;color:var(--muted);line-height:1.6}
+.sc-impact{padding:28px 32px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:8px}
+.sc-impact-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.sc-impact-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sc-cta{display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--accent);gap:6px;padding:28px}
+.sc-arrow{font-size:18px;transition:transform .2s}
+.scenario-row:hover .sc-arrow{transform:translateX(4px)}
+
+/* ── TECH STACK ── */
+.tech-section{max-width:1200px;margin:0 auto;padding:120px 48px}
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:64px}
+.tech-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 24px;transition:border-color .2s}
+.tech-card:hover{border-color:var(--border2)}
+.tech-layer{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.tech-name{font-size:18px;font-weight:700;margin-bottom:8px}
+.tech-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:160px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(0,229,160,0.07),transparent 70%);pointer-events:none}
+.cta-title{font-size:clamp(42px,6vw,80px);font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:24px}
+.cta-title .highlight{color:var(--accent)}
+.cta-sub{font-size:18px;color:var(--muted);max-width:480px;margin:0 auto 48px;font-weight:300}
+.cta-flag{display:flex;align-items:center;gap:6px;justify-content:center;margin-top:32px;font-size:13px;color:var(--muted)}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:48px;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-size:20px;font-weight:700}
+.footer-logo span{color:var(--accent)}
+.footer-right{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* ── ANIMATIONS ── */
+.reveal{opacity:1;transform:translateY(0);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
+.reveal.hidden{opacity:0;transform:translateY(32px)}
+.reveal.hidden.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  .nav-links{display:none}
+  section,.sim-preview-wrap,.compare-wrap,.scenarios-inner,.features-inner,.tech-section{padding-left:20px;padding-right:20px}
+  .features-grid{grid-template-columns:1fr}
+  .compare-grid{grid-template-columns:1fr}
+  .compare-col.future{border-left:none;border-top:2px solid var(--accent)}
+  .tech-grid{grid-template-columns:repeat(2,1fr)}
+  .scenario-row{grid-template-columns:1fr}
+  .sc-num{display:none}
+  .sc-cta{display:none}
+  footer{flex-direction:column;gap:16px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L16 6V12L9 16L2 12V6L9 2Z" stroke="#060810" stroke-width="1.5" fill="#060810"/><circle cx="9" cy="9" r="2.5" fill="#00e5a0"/></svg>
+    </div>
+    <span class="nav-logo-text">Ganon <span>Ba</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#simulator">Simulator</a></li>
+    <li><a href="#scenarios">Scenarios</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#tech">Tech</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Join waitlist</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">Philippines Infrastructure Simulator</div>
+  <h1 class="hero-title reveal">
+    What if the<br>
+    <span class="ph">Philippines</span><br>
+    looked like <span class="future">this?</span>
+  </h1>
+  <p class="hero-sub reveal reveal-delay-1">Walk through a photorealistic simulation of Metro Manila with world-class trains, protected bike lanes, and clean air. See the future before it happens.</p>
+  <div class="hero-actions reveal reveal-delay-2">
+    <a href="#simulator" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polygon points="5,2 14,8 5,14" fill="currentColor"/></svg>
+      Launch simulator
+    </a>
+    <a href="#scenarios" class="btn-secondary">Explore scenarios</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</div>
+
+<!-- STATS TICKER -->
+<div class="stats-bar">
+  <div class="stats-track" id="ticker">
+    <div class="stat-item"><span class="stat-num">87 min</span><span class="stat-label">Average Manila commute today</span></div>
+    <div class="stat-item"><span class="stat-num">48 min</span><span class="stat-label">Average Tokyo commute</span></div>
+    <div class="stat-item"><span class="stat-num">₱3.5B</span><span class="stat-label">Lost daily to traffic congestion</span></div>
+    <div class="stat-item"><span class="stat-num">55 Mbps</span><span class="stat-label">PH average internet speed</span></div>
+    <div class="stat-item"><span class="stat-num">#80</span><span class="stat-label">PH air quality rank globally</span></div>
+    <div class="stat-item"><span class="stat-num">8%</span><span class="stat-label">Roads with bike infrastructure</span></div>
+    <div class="stat-item"><span class="stat-num">7107</span><span class="stat-label">Islands. One future.</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="stat-item"><span class="stat-num">87 min</span><span class="stat-label">Average Manila commute today</span></div>
+    <div class="stat-item"><span class="stat-num">48 min</span><span class="stat-label">Average Tokyo commute</span></div>
+    <div class="stat-item"><span class="stat-num">₱3.5B</span><span class="stat-label">Lost daily to traffic congestion</span></div>
+    <div class="stat-item"><span class="stat-num">55 Mbps</span><span class="stat-label">PH average internet speed</span></div>
+    <div class="stat-item"><span class="stat-num">#80</span><span class="stat-label">PH air quality rank globally</span></div>
+    <div class="stat-item"><span class="stat-num">8%</span><span class="stat-label">Roads with bike infrastructure</span></div>
+    <div class="stat-item"><span class="stat-num">7107</span><span class="stat-label">Islands. One future.</span></div>
+  </div>
+</div>
+
+<!-- 3D SIMULATOR PREVIEW -->
+<div class="sim-preview-wrap" id="simulator" style="padding-top:120px">
+  <div class="reveal">
+    <div class="section-eyebrow">Live 3D Simulator</div>
+    <h2 class="section-title">Walk through tomorrow's Manila</h2>
+    <p class="section-sub" style="margin-bottom:40px">Real street grid. Real landmarks. Toggle infrastructure scenarios and watch the city transform in real time.</p>
+  </div>
+  <div class="sim-window reveal reveal-delay-1">
+    <div class="sim-titlebar">
+      <div class="sim-dot" style="background:#ff5f57"></div>
+      <div class="sim-dot" style="background:#febc2e"></div>
+      <div class="sim-dot" style="background:#28c840"></div>
+      <div class="sim-url">ganon-ba.ph/simulate · Metro Manila, NCR · 14.5995° N, 120.9842° E</div>
+    </div>
+    <div style="position:relative">
+      <canvas id="simCanvas"></canvas>
+      <div class="sim-label-tag" id="simLocLabel">EDSA — Quezon City</div>
+      <div class="sim-compass">N</div>
+      <div class="sim-ui-overlay">
+        <div class="sim-scenario-btns">
+          <button class="sc-pill active" onclick="setScen(0,this)">Today's Manila</button>
+          <button class="sc-pill" onclick="setScen(1,this)">+ MRT Network</button>
+          <button class="sc-pill" onclick="setScen(2,this)">+ Bike Lanes</button>
+          <button class="sc-pill" onclick="setScen(3,this)">+ Green Spaces</button>
+          <button class="sc-pill" onclick="setScen(4,this)">Dream Manila</button>
+        </div>
+        <div class="sim-coords" id="simCoords">Click game to start<br><span style="color:rgba(240,242,248,0.45);font-size:10px">WASD move · Space jump · drag to look</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES GRID -->
+<div class="features-full" id="features">
+  <div class="features-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">Platform features</div>
+      <h2 class="section-title">Built for believers,<br>backed by data</h2>
+      <p class="section-sub">Every simulation is grounded in real Philippine statistics, peer-reviewed infrastructure research, and data from cities that already got it right.</p>
+    </div>
+    <div class="features-grid reveal reveal-delay-1">
+      <div class="feat-card">
+        <div class="feat-tag live">Live</div>
+        <div class="feat-icon green">🗺️</div>
+        <div class="feat-name">Real OSM street data</div>
+        <div class="feat-desc">OpenStreetMap data of actual Metro Manila roads, intersections, and landmarks — not a made-up grid.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-tag live">Live</div>
+        <div class="feat-icon purple">🚆</div>
+        <div class="feat-name">Infrastructure scenarios</div>
+        <div class="feat-desc">Toggle MRT lines, bike lanes, flood control, green spaces, and fiber broadband. See the compounding effect instantly.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-tag soon">Soon</div>
+        <div class="feat-icon orange">📊</div>
+        <div class="feat-name">Real-time impact metrics</div>
+        <div class="feat-desc">Every toggle shows live stats: commute time saved, CO₂ reduced, GDP impact, accident rates, air quality index.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-tag soon">Soon</div>
+        <div class="feat-icon green">🌆</div>
+        <div class="feat-name">Day / night cycle</div>
+        <div class="feat-desc">Experience Manila at rush hour, midnight, and dawn. Traffic simulation changes by hour of day.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-tag soon">Soon</div>
+        <div class="feat-icon gold">🏝️</div>
+        <div class="feat-name">All 7,107 islands</div>
+        <div class="feat-desc">Not just NCR. Simulate Cebu's transport, Davao's urban planning, Bohol's eco-tourism infrastructure.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-tag soon">Soon</div>
+        <div class="feat-icon purple">🤝</div>
+        <div class="feat-name">Share your scenario</div>
+        <div class="feat-desc">Export your custom simulation as a link, video, or PDF policy brief. Built for advocates and city planners.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARE SECTION -->
+<div class="compare-section" id="scenarios">
+  <div class="compare-wrap">
+    <div class="reveal">
+      <div class="section-eyebrow">The gap is real</div>
+      <h2 class="section-title">Today vs. what's possible</h2>
+      <p class="section-sub">These aren't dreams. Every metric on the right already exists in cities that chose to build differently.</p>
+    </div>
+    <div class="compare-grid reveal reveal-delay-1">
+      <div class="compare-col now">
+        <div class="compare-head now-h">Manila today</div>
+        <div class="compare-row"><span class="c-label">Avg commute time</span><span class="c-val bad">87 min</span></div>
+        <div class="compare-row"><span class="c-label">MRT lines</span><span class="c-val bad">3</span></div>
+        <div class="compare-row"><span class="c-label">Bike lane coverage</span><span class="c-val bad">8%</span></div>
+        <div class="compare-row"><span class="c-label">Average internet speed</span><span class="c-val bad">55 Mbps</span></div>
+        <div class="compare-row"><span class="c-label">Green space per person</span><span class="c-val bad">0.9 m²</span></div>
+        <div class="compare-row"><span class="c-label">Air quality index (PM2.5)</span><span class="c-val bad">35 µg/m³</span></div>
+        <div class="c-bar-wrap">
+          <div class="c-bar-label">Quality of life index</div>
+          <div class="c-bar-track"><div class="c-bar-fill now" id="barNow" style="width:28%"></div></div>
+          <div class="c-bar-label">Infrastructure score</div>
+          <div class="c-bar-track"><div class="c-bar-fill now" style="width:22%"></div></div>
+        </div>
+      </div>
+      <div class="compare-col future">
+        <div class="compare-head future-h">Manila — simulated future</div>
+        <div class="compare-row"><span class="c-label">Avg commute time</span><span class="c-val good">34 min</span></div>
+        <div class="compare-row"><span class="c-label">MRT lines</span><span class="c-val good">16</span></div>
+        <div class="compare-row"><span class="c-label">Bike lane coverage</span><span class="c-val good">65%</span></div>
+        <div class="compare-row"><span class="c-label">Average internet speed</span><span class="c-val good">320 Mbps</span></div>
+        <div class="compare-row"><span class="c-label">Green space per person</span><span class="c-val good">9 m²</span></div>
+        <div class="compare-row"><span class="c-label">Air quality index (PM2.5)</span><span class="c-val good">10 µg/m³</span></div>
+        <div class="c-bar-wrap">
+          <div class="c-bar-label">Quality of life index</div>
+          <div class="c-bar-track"><div class="c-bar-fill future" id="barFuture" style="width:0%"></div></div>
+          <div class="c-bar-label">Infrastructure score</div>
+          <div class="c-bar-track"><div class="c-bar-fill future" style="width:0%" id="barFuture2"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENARIOS LIST -->
+<div class="scenarios-full" id="scenarios-list">
+  <div class="scenarios-inner">
+    <div class="reveal">
+      <div class="section-eyebrow">Simulation scenarios</div>
+      <h2 class="section-title">Pick your what-if</h2>
+      <p class="section-sub">Each scenario is independently researchable, policy-backed, and visualized in the 3D simulator above.</p>
+    </div>
+    <div class="scenarios-list reveal reveal-delay-1">
+      <div class="scenario-row" onclick="sendPrompt('Tell me more about the Manila trains scenario')">
+        <div class="sc-num">01</div>
+        <div class="sc-info">
+          <h3>What if Manila had Tokyo-level trains?</h3>
+          <p>16 MRT lines, 2-minute frequency, full air-con — modeled on Tokyo Metro's 1972–2000 expansion plan.</p>
+        </div>
+        <div class="sc-impact">
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>53 minutes cut from daily commute</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>8M+ daily riders off roads</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>₱890B GDP productivity gain</div>
+        </div>
+        <div class="sc-cta">Simulate <span class="sc-arrow">→</span></div>
+      </div>
+      <div class="scenario-row">
+        <div class="sc-num">02</div>
+        <div class="sc-info">
+          <h3>What if every city had bike lanes?</h3>
+          <p>Protected infrastructure modeled on Amsterdam's 1975–1995 cycling transformation — applied to PH urban density.</p>
+        </div>
+        <div class="sc-impact">
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>4M new daily cyclists</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>₱4.2B annual health savings</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent)"></div>22% reduction in PM2.5</div>
+        </div>
+        <div class="sc-cta">Simulate <span class="sc-arrow">→</span></div>
+      </div>
+      <div class="scenario-row">
+        <div class="sc-num">03</div>
+        <div class="sc-info">
+          <h3>What if internet speeds doubled?</h3>
+          <p>Fiber-to-the-home rollout modeled on South Korea's 2000s national broadband plan — scaled to PH archipelago geography.</p>
+        </div>
+        <div class="sc-impact">
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent2)"></div>+3.8% GDP from digital economy</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent2)"></div>7M students newly connected</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent2)"></div>PH rises from #93 to top 20</div>
+        </div>
+        <div class="sc-cta">Simulate <span class="sc-arrow">→</span></div>
+      </div>
+      <div class="scenario-row">
+        <div class="sc-num">04</div>
+        <div class="sc-info">
+          <h3>What if Manila Bay was fully restored?</h3>
+          <p>Complete ecosystem recovery modeled on Singapore's coastal masterplan and Seoul's Cheonggyecheon river restoration.</p>
+        </div>
+        <div class="sc-impact">
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent3)"></div>18km waterfront activated</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent3)"></div>Flood risk reduced by 40%</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--accent3)"></div>₱200B tourism value unlocked</div>
+        </div>
+        <div class="sc-cta">Simulate <span class="sc-arrow">→</span></div>
+      </div>
+      <div class="scenario-row">
+        <div class="sc-num">05</div>
+        <div class="sc-info">
+          <h3>What if the Philippines ran on 100% renewables?</h3>
+          <p>Solar, wind, and geothermal transition modeled on Denmark's energy transition — matched to PH solar irradiance data.</p>
+        </div>
+        <div class="sc-impact">
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--ph-gold)"></div>₱180B annual fuel import savings</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--ph-gold)"></div>50% electricity cost reduction</div>
+          <div class="sc-impact-item"><div class="sc-impact-dot" style="background:var(--ph-gold)"></div>Zero carbon grid by 2045</div>
+        </div>
+        <div class="sc-cta">Simulate <span class="sc-arrow">→</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH STACK -->
+<div class="tech-section" id="tech">
+  <div class="reveal">
+    <div class="section-eyebrow">Built with</div>
+    <h2 class="section-title">The technology behind the vision</h2>
+    <p class="section-sub">Ganon Ba uses the same stack that powers professional urban planning tools and game studios.</p>
+  </div>
+  <div class="tech-grid reveal reveal-delay-1">
+    <div class="tech-card">
+      <div class="tech-layer">Rendering</div>
+      <div class="tech-name">Three.js</div>
+      <div class="tech-desc">WebGL-powered 3D engine. Real perspective, dynamic lighting, and street-level camera that runs in any browser.</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Map data</div>
+      <div class="tech-name">OpenStreetMap</div>
+      <div class="tech-desc">Real Philippine street geometry, building footprints, and road classifications — updated by the community daily.</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">3D Cities</div>
+      <div class="tech-name">Cesium Ion</div>
+      <div class="tech-desc">Photorealistic 3D tiles of real Metro Manila buildings streamed at full resolution with Google Maps integration.</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-layer">Data science</div>
+      <div class="tech-name">PH Open Data</div>
+      <div class="tech-desc">PSA, MMDA, DPWH, and DOTr datasets power every impact metric. Real numbers, not guesses.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section" id="cta">
+  <div class="cta-glow"></div>
+  <div class="reveal">
+    <h2 class="cta-title">Ganon <span class="highlight">nga ba.</span></h2>
+    <p class="cta-sub">Be the first to walk through the Philippines we deserve. Join the waitlist for early access.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="#" class="btn-primary" style="font-size:16px;padding:16px 40px">
+        Join the waitlist →
+      </a>
+      <a href="#" class="btn-secondary" style="font-size:16px;padding:16px 40px">Watch demo</a>
+    </div>
+    <div class="cta-flag">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="14" fill="#0038A8"/><polygon points="0,0 0,14 10,7" fill="#CE1126"/><polygon points="1,7 5,4.5 4,8 7,5.5 5,9 5,5 3,9 3,5 1,7" fill="#FCD116"/></svg>
+      Made with pride for the Philippines
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ganon <span>Ba</span></div>
+  <div class="footer-right">© 2025 Ganon Ba · Philippines Infrastructure Simulator</div>
+</footer>
+
+<!-- THREE.JS MINECRAFT-STYLE VOXEL ENGINE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ─── NAV SCROLL ─── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
+});
+/* ─── REVEAL ─── */
+const revealObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>{
+  // Only animate elements below the fold
+  if(el.getBoundingClientRect().top > window.innerHeight){
+    el.classList.add('hidden');
+    revealObs.observe(el);
+  }
+});
+/* ─── BARS ─── */
+const barObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){setTimeout(()=>{const f=document.getElementById('barFuture');const f2=document.getElementById('barFuture2');const n=document.getElementById('barNow');if(f)f.style.width='82%';if(f2)f2.style.width='88%';if(n)n.style.width='28%';},300);}});},{threshold:0.2});
+const compareEl=document.querySelector('.compare-grid');if(compareEl)barObs.observe(compareEl);
+
+/* ════════════════════════════════════════════
+   MINECRAFT-STYLE VOXEL CITY ENGINE
+   ════════════════════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('simCanvas');
+  if(!canvas)return;
+
+  /* ── RENDERER ── */
+  const W=canvas.parentElement.clientWidth,H=520;
+  canvas.width=W;canvas.height=H;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:false});// pixelated = no antialias
+  renderer.setSize(W,H);
+  renderer.setPixelRatio(1); // chunky pixel look
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.BasicShadowMap;
+  renderer.setClearColor(0x87CEEB);
+
+  /* ── SCENE & CAMERA ── */
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(75,W/H,0.1,300);
+  camera.position.set(8,3,8);
+  camera.rotation.order='YXZ';
+
+  /* ── MINECRAFT-STYLE PIXEL TEXTURES ── */
+  function pixTex(colors,size=4){
+    const s=size;
+    const c=document.createElement('canvas');c.width=s;c.height=s;
+    const ctx=c.getContext('2d');
+    for(let y=0;y<s;y++)for(let x=0;x<s;x++){
+      ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];
+      ctx.fillRect(x,y,1,1);
+    }
+    const t=new THREE.CanvasTexture(c);
+    t.magFilter=THREE.NearestFilter;
+    t.minFilter=THREE.NearestFilter;
+    t.wrapS=t.wrapT=THREE.RepeatWrapping;
+    return t;
+  }
+
+  // Block texture palettes — Minecraft-style per-face variation
+  const TEX={
+    grass:   pixTex(['#5a8a30','#4e7a28','#6a9a38','#3d6520','#5a8a30','#4e7a28'],8),
+    grassTop:pixTex(['#5a8a30','#6aaa35','#4e7a28','#7aba40','#5a8a30','#3d6520'],8),
+    dirt:    pixTex(['#8B5E3C','#7a4f30','#9a6a44','#7a5030','#8B5E3C'],8),
+    stone:   pixTex(['#7a7a7a','#6a6a6a','#8a8a8a','#707070','#7a7a7a','#828282'],8),
+    concrete:pixTex(['#9a9a9a','#888888','#a0a0a0','#8c8c8c','#949494'],8),
+    road:    pixTex(['#333333','#2a2a2a','#3a3a3a','#2e2e2e','#333333'],8),
+    roadLine:pixTex(['#ffff00','#eeee00','#ffff44'],8),
+    glass:   pixTex(['#88ccff','#aaddff','#66bbee','#99ddff'],8),
+    brick:   pixTex(['#b44','#a33','#c55','#933','#b44'],8),
+    wood:    pixTex(['#8B6914','#7a5c10','#9c7a1a','#8B6914'],8),
+    leaf:    pixTex(['#2d7a18','#1e6010','#3a9020','#256614','#2d7a18'],8),
+    log:     pixTex(['#5c4010','#4a3008','#6a5018','#5c4010'],8),
+    sand:    pixTex(['#d4b483','#c8a870','#dcc090','#d0b07c'],8),
+    water:   pixTex(['#3a7abf','#2a6aaf','#4a8acf','#336699'],8),
+    rail:    pixTex(['#9966ff','#8855ee','#aa77ff','#7744dd'],8),
+    bike:    pixTex(['#00cc88','#00bb77','#00dd99','#009966'],8),
+    snow:    pixTex(['#eef4ff','#ddeeff','#f0f8ff','#e0ecff'],8),
+    plank:   pixTex(['#c8962a','#b8861a','#d8a63a','#a87618'],8),
+    cloud:   pixTex(['#ffffff','#f0f0f0','#eeeeee','#ffffff'],8),
+    rooftop: pixTex(['#cc4422','#bb3311','#dd5533','#aa2200'],8),
+  };
+
+  function mat(tex,col){
+    if(tex)return new THREE.MeshLambertMaterial({map:tex});
+    return new THREE.MeshLambertMaterial({color:col||0x888888});
+  }
+
+  // Box with per-face materials (like Minecraft blocks)
+  const CUBE=new THREE.BoxGeometry(1,1,1);
+  function block(x,y,z,topTex,sideTex,botTex){
+    const mats=[
+      mat(sideTex),mat(sideTex),
+      mat(topTex), mat(botTex||sideTex),
+      mat(sideTex),mat(sideTex),
+    ];
+    const m=new THREE.Mesh(CUBE,mats);
+    m.position.set(x+.5,y+.5,z+.5);
+    m.castShadow=true;m.receiveShadow=true;
+    return m;
+  }
+
+  /* ── CHUNK SYSTEM ── */
+  const chunks=[];
+  function makeChunk(){const g=new THREE.Group();scene.add(g);chunks.push(g);return g;}
+
+  /* ── WORLD LAYOUT (voxel grid) ── */
+  // Each entry: [x,y,z, topTex,sideTex,botTex]
+  // Ground layer: 40x40 area
+  const staticChunk=makeChunk();
+  const scenarioChunk=makeChunk();
+
+  function addB(g,x,y,z,top,side,bot){g.add(block(x,y,z,top,side,bot||side));}
+
+  // ── GROUND LAYER ──
+  for(let x=-20;x<20;x++){
+    for(let z=-20;z<20;z++){
+      // Roads at x=-8,-4,0,4,8 and z=-8,-4,0,4,8
+      const onRoadX=(x===-8||x===-4||x===0||x===4||x===8);
+      const onRoadZ=(z===-8||z===-4||z===0||z===4||z===8);
+      if(onRoadX||onRoadZ){
+        addB(staticChunk,x,0,z,TEX.road,TEX.stone);
+        // Road markings
+        if((onRoadX&&!onRoadZ&&Math.abs(z%3)===1)||(onRoadZ&&!onRoadX&&Math.abs(x%3)===1)){
+          addB(staticChunk,x,0,z,TEX.roadLine,TEX.road);
+        }
+        // Sidewalk edge
+        if(onRoadX&&!onRoadZ){
+          addB(staticChunk,x-1,0,z,TEX.concrete,TEX.concrete);
+          addB(staticChunk,x+1,0,z,TEX.concrete,TEX.concrete);
+        }
+        if(onRoadZ&&!onRoadX){
+          addB(staticChunk,x,0,z-1,TEX.concrete,TEX.concrete);
+          addB(staticChunk,x,0,z+1,TEX.concrete,TEX.concrete);
+        }
+      } else {
+        addB(staticChunk,x,0,z,TEX.grassTop,TEX.grass,TEX.dirt);
+      }
+    }
+  }
+  // Water plaza center
+  for(let x=-2;x<=2;x++)for(let z=-2;z<=2;z++){
+    addB(staticChunk,x,0,z,TEX.water,TEX.water);
+  }
+  // Sand border
+  for(let x=-3;x<=3;x++)for(let z=-3;z<=3;z++){
+    if(Math.abs(x)===3||Math.abs(z)===3)addB(staticChunk,x,0,z,TEX.sand,TEX.sand);
+  }
+
+  /* ── VOXEL BUILDINGS ── */
+  function voxelBuilding(g,bx,bz,w,d,h,wallTex,roofTex,hasTower){
+    // Foundation
+    for(let x=0;x<w;x++)for(let z=0;z<d;z++){
+      addB(g,bx+x,0,bz+z,TEX.concrete,TEX.stone);
+    }
+    // Walls
+    for(let y=1;y<h;y++){
+      for(let x=0;x<w;x++)for(let z=0;z<d;z++){
+        if(x===0||x===w-1||z===0||z===d-1){
+          const isWin=(y%3===1&&x>0&&x<w-1&&z===d-1);
+          addB(g,bx+x,y,bz+z,isWin?TEX.glass:wallTex,wallTex);
+        }else if(y===h-1){
+          addB(g,bx+x,y,bz+z,roofTex||TEX.rooftop,wallTex);
+        }
+      }
+    }
+    // Roof details
+    for(let x=1;x<w-1;x++)for(let z=1;z<d-1;z++){
+      addB(g,bx+x,h,bz+z,roofTex||TEX.concrete,roofTex||TEX.concrete);
+    }
+    // Water tower
+    if(hasTower){
+      const tx=bx+Math.floor(w/2)-1,tz=bz+Math.floor(d/2)-1;
+      for(let y=h+1;y<h+4;y++){
+        addB(g,tx,y,tz,TEX.wood,TEX.log);
+        addB(g,tx+1,y,tz,TEX.wood,TEX.log);
+        addB(g,tx,y,tz+1,TEX.wood,TEX.log);
+      }
+      addB(g,tx,h+4,tz,TEX.plank,TEX.plank);
+      addB(g,tx+1,h+4,tz,TEX.plank,TEX.plank);
+      addB(g,tx,h+4,tz+1,TEX.plank,TEX.plank);
+      addB(g,tx+1,h+4,tz+1,TEX.plank,TEX.plank);
+    }
+  }
+
+  // Manila-inspired block city
+  voxelBuilding(staticChunk,-18,-18,5,5,14,TEX.concrete,TEX.rooftop,true);
+  voxelBuilding(staticChunk, 10,-18,6,6,20,TEX.brick,TEX.concrete,false);
+  voxelBuilding(staticChunk,-18, 11,4,4,10,TEX.concrete,TEX.rooftop,false);
+  voxelBuilding(staticChunk, 12, 11,5,5,16,TEX.concrete,TEX.rooftop,true);
+  voxelBuilding(staticChunk,-18,  1,3,3,8, TEX.brick,TEX.concrete,false);
+  voxelBuilding(staticChunk, 13, -4,4,6,12,TEX.concrete,TEX.rooftop,false);
+  voxelBuilding(staticChunk, -6,-18,5,4,18,TEX.concrete,TEX.snow,true);
+  voxelBuilding(staticChunk,  2,-18,4,5,9, TEX.brick,TEX.concrete,false);
+  voxelBuilding(staticChunk, -6, 12,6,5,22,TEX.concrete,TEX.rooftop,true);
+  voxelBuilding(staticChunk,  2, 12,4,4,7, TEX.concrete,TEX.concrete,false);
+  voxelBuilding(staticChunk,-18, -6,3,5,6, TEX.brick,TEX.rooftop,false);
+
+  // Trees (voxel style - stacked cube trunk + cube canopy)
+  function voxelTree(g,x,z,h){
+    for(let y=1;y<=h;y++) addB(g,x,y,z,TEX.log,TEX.log);
+    for(let lx=-2;lx<=2;lx++)for(let lz=-2;lz<=2;lz++)for(let ly=0;ly<=2;ly++){
+      if(Math.abs(lx)+Math.abs(lz)+Math.abs(ly)<4)
+        addB(g,x+lx,h+1+ly,z+lz,TEX.leaf,TEX.leaf);
+    }
+  }
+  // Static trees everywhere in the base world
+  [[-15,-15],[-15,7],[7,-15],[7,7],[-3,-15],[-3,7],[-10,0],[0,-10]].forEach(([x,z])=>{
+    voxelTree(staticChunk,x,z,3+Math.floor(Math.random()*3));
+  });
+
+  /* ── CLOUDS ── */
+  const cloudGroup=new THREE.Group();scene.add(cloudGroup);
+  function makeCloud(cx,cz){
+    const cg=new THREE.Group();
+    [[0,0,0],[1,0,0],[-1,0,0],[0,0,1],[0,0,-1],[1,0,1],[-1,0,-1],[2,0,0]].forEach(([dx,dy,dz])=>{
+      cg.add(block(dx,dy,dz,TEX.cloud,TEX.cloud));
+    });
+    [[0,1,0],[1,1,0],[-1,1,0],[0,1,1]].forEach(([dx,dy,dz])=>{
+      cg.add(block(dx,dy,dz,TEX.cloud,TEX.cloud));
+    });
+    cg.position.set(cx,28,cz);cloudGroup.add(cg);return cg;
+  }
+  const clouds=[];
+  clouds.push(makeCloud(-30,-10));clouds.push(makeCloud(20,5));
+  clouds.push(makeCloud(-5,25));clouds.push(makeCloud(40,-20));
+  clouds.push(makeCloud(-25,30));
+
+  /* ── SCENARIO OBJECTS ── */
+  let scen=0;
+
+  function clearScenario(){
+    while(scenarioChunk.children.length)scenarioChunk.remove(scenarioChunk.children[0]);
+  }
+
+  function buildScenario(s){
+    clearScenario();
+    if(s===0) return; // Today - nothing extra
+
+    // ── MRT TRACKS ──
+    if(s>=1){
+      // Elevated rail on x=0 road (N-S), x=8 road
+      [0,8].forEach(rx=>{
+        for(let z=-19;z<19;z++){
+          // Pillar every 4
+          if(z%4===0){
+            addB(scenarioChunk,rx,1,z,TEX.concrete,TEX.concrete);
+            addB(scenarioChunk,rx,2,z,TEX.concrete,TEX.concrete);
+            addB(scenarioChunk,rx,3,z,TEX.concrete,TEX.concrete);
+          }
+          // Rail deck
+          addB(scenarioChunk,rx-1,4,z,TEX.rail,TEX.concrete);
+          addB(scenarioChunk,rx,4,z,TEX.rail,TEX.concrete);
+          addB(scenarioChunk,rx+1,4,z,TEX.rail,TEX.concrete);
+        }
+      });
+      // Train car on rail
+      const trainZ=((scen>=1?trainAnimT:0)+19)%38-19;
+      for(let i=0;i<3;i++){
+        const tz=Math.floor(trainZ)-i*4;
+        addB(scenarioChunk,0,5,tz,TEX.rail,TEX.rail);
+        addB(scenarioChunk,0,6,tz,TEX.glass,TEX.rail);
+        addB(scenarioChunk,0,7,tz,TEX.rail,TEX.rail);
+      }
+    }
+
+    // ── BIKE LANES ──
+    if(s>=2){
+      for(let z=-19;z<19;z++){
+        addB(scenarioChunk,-5,1,z,TEX.bike,TEX.bike);
+        addB(scenarioChunk, 5,1,z,TEX.bike,TEX.bike);
+      }
+      for(let x=-19;x<19;x++){
+        addB(scenarioChunk,x,1,-5,TEX.bike,TEX.bike);
+        addB(scenarioChunk,x,1, 5,TEX.bike,TEX.bike);
+      }
+    }
+
+    // ── GREEN SPACES ──
+    if(s>=3){
+      // Big park - replace some concrete with grass+trees
+      for(let x=-3;x<=3;x++)for(let z=-3;z<=3;z++){
+        addB(scenarioChunk,x,1,z,TEX.grassTop,TEX.grass,TEX.dirt);
+      }
+      [[-2,-2],[-2,2],[2,-2],[2,2],[0,-3],[0,3]].forEach(([tx,tz])=>{
+        voxelTree(scenarioChunk,tx,tz,4);
+      });
+    }
+
+    // ── DREAM MANILA: all of the above + solar panels ──
+    if(s>=4){
+      // Solar panels on rooftops
+      [[-18,-18,14],[10,-18,20],[-6,12,22],[12,11,16]].forEach(([bx,bz,bh])=>{
+        for(let px=0;px<3;px++)for(let pz=0;pz<3;pz++){
+          addB(scenarioChunk,bx+1+px,bh+1,bz+1+pz,null,null);
+          // blue glass = solar
+          const sp=new THREE.Mesh(CUBE,mat(TEX.glass));
+          sp.position.set(bx+1+px+.5,bh+1.5,bz+1+pz+.5);
+          sp.scale.y=0.1;
+          scenarioChunk.add(sp);
+        }
+      });
+    }
+  }
+
+  let trainAnimT=0;
+
+  window.setScen=function(s,btn){
+    scen=s;
+    document.querySelectorAll('.sc-pill').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');
+    buildScenario(s);
+    const labels=['Manila Today','MRT Network','+ Bike Lanes','+ Green Spaces','Dream Manila 2045'];
+    document.getElementById('simLocLabel').textContent=labels[s]||'Metro Manila';
+  };
+
+  buildScenario(0);
+
+  /* ── LIGHTING ── */
+  scene.add(new THREE.AmbientLight(0xffffff,0.7));
+  const sun=new THREE.DirectionalLight(0xfffaee,1.4);
+  sun.position.set(30,60,20);
+  sun.castShadow=true;
+  sun.shadow.mapSize.set(1024,1024);
+  sun.shadow.camera.near=1;sun.shadow.camera.far=200;
+  sun.shadow.camera.left=-60;sun.shadow.camera.right=60;
+  sun.shadow.camera.top=60;sun.shadow.camera.bottom=-60;
+  scene.add(sun);
+
+  /* ── DAY / NIGHT CYCLE ── */
+  let dayTime=0.3; // 0=midnight 0.5=noon 1=midnight
+
+  /* ── SKY ── */
+  const skyColors={
+    day:new THREE.Color(0x87CEEB),
+    dusk:new THREE.Color(0xff7744),
+    night:new THREE.Color(0x05080f),
+  };
+
+  /* ── FOG ── */
+  scene.fog=new THREE.Fog(0x87CEEB,30,140);
+
+  /* ── STARS ── */
+  const starGeo=new THREE.BufferGeometry();
+  const sv=[];
+  for(let i=0;i<800;i++){
+    const t=Math.random()*Math.PI*2,p=Math.acos(Math.random()*2-1);
+    sv.push(200*Math.sin(p)*Math.cos(t),200*Math.cos(p),200*Math.sin(p)*Math.sin(t));
+  }
+  starGeo.setAttribute('position',new THREE.Float32BufferAttribute(sv,3));
+  const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xffffff,size:1.2,transparent:true,opacity:0}));
+  scene.add(stars);
+
+  /* ── POINTER LOCK CONTROLS ── */
+  let yaw=Math.PI/4,pitch=0;
+  let px=8,py=3,pz=8;
+  let velY=0,onGround=true;
+  const keys={};
+  let locked=false;
+
+  canvas.addEventListener('click',()=>{
+    if(!locked) canvas.requestPointerLock();
+  });
+  document.addEventListener('pointerlockchange',()=>{
+    locked=document.pointerLockElement===canvas;
+    document.getElementById('simCoords').innerHTML=locked
+      ?'<span style="color:var(--accent)">LOCKED · ESC to release</span><br><span style="color:rgba(240,242,248,0.45);font-size:10px">WASD move · Space jump</span>'
+      :'<span style="color:rgba(240,242,248,0.45)">Click game to lock mouse</span><br><span style="color:rgba(240,242,248,0.45);font-size:10px">WASD + Space to jump</span>';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!locked)return;
+    yaw-=e.movementX*0.002;
+    pitch=Math.max(-1.4,Math.min(1.4,pitch-e.movementY*0.002));
+  });
+  // touch look
+  let touchLook=false,tlx=0,tly=0;
+  canvas.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){touchLook=true;tlx=e.touches[0].clientX;tly=e.touches[0].clientY;}
+  });
+  canvas.addEventListener('touchend',()=>touchLook=false);
+  canvas.addEventListener('touchmove',e=>{
+    if(!touchLook)return;
+    yaw-=(e.touches[0].clientX-tlx)*0.004;
+    pitch=Math.max(-1.2,Math.min(1.2,pitch-(e.touches[0].clientY-tly)*0.004));
+    tlx=e.touches[0].clientX;tly=e.touches[0].clientY;
+    e.preventDefault();
+  },{passive:false});
+
+  document.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();});
+  document.addEventListener('keyup',e=>{keys[e.code]=false;});
+
+  /* ── COLLISION (simple floor check) ── */
+  function getFloor(x,z){
+    // roads and ground = y=1, buildings up to various heights
+    return 1.6; // player eye height above ground
+  }
+
+  /* ── HUD CROSSHAIR ── */
+  const crosshair=document.createElement('div');
+  crosshair.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;pointer-events:none;z-index:5;';
+  crosshair.innerHTML=`<svg width="18" height="18" viewBox="0 0 18 18"><line x1="9" y1="2" x2="9" y2="16" stroke="white" stroke-width="1.5" opacity="0.8"/><line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.5" opacity="0.8"/></svg>`;
+  canvas.parentElement.appendChild(crosshair);
+
+  /* ── HOTBAR ── */
+  const hotbar=document.createElement('div');
+  hotbar.style.cssText='position:absolute;bottom:52px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:6;';
+  const hotbarItems=['🏗️ BUILD','🚆 RAIL','🚲 BIKE','🌳 TREE','💡 SOLAR'];
+  hotbarItems.forEach((item,i)=>{
+    const slot=document.createElement('div');
+    slot.style.cssText=`width:44px;height:44px;background:rgba(0,0,0,0.55);border:2px solid ${i===0?'white':'rgba(255,255,255,0.3)'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;`;
+    slot.textContent=item.split(' ')[0];
+    slot.title=item;
+    hotbar.appendChild(slot);
+  });
+  canvas.parentElement.appendChild(hotbar);
+
+  /* ── LOCATION LABELS ── */
+  const LOCS=[
+    {x:-15,z:-15,label:'Quezon City'},
+    {x:10,z:-15,label:'Makati CBD'},
+    {x:-15,z:12,label:'Pasig City'},
+    {x:10,z:12,label:'BGC Taguig'},
+    {x:0,z:0,label:'Manila Bay Plaza'},
+    {x:-8,z:0,label:'EDSA'},
+    {x:8,z:0,label:'Ortigas'},
+  ];
+
+  /* ── ANIMATE ── */
+  let frame=0,trainZ=-19;
+  const CLOCK=new THREE.Clock();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt=Math.min(CLOCK.getDelta(),.05);
+    frame++;
+    trainAnimT+=dt*4;
+
+    /* Player movement */
+    const spd=locked?5:3;
+    const fwdX=Math.sin(yaw),fwdZ=Math.cos(yaw);
+    const rgtX=Math.cos(yaw),rgtZ=-Math.sin(yaw);
+    let mx=0,mz=0;
+    if(keys['KeyW']||keys['ArrowUp']){mx+=fwdX*spd*dt;mz+=fwdZ*spd*dt;}
+    if(keys['KeyS']||keys['ArrowDown']){mx-=fwdX*spd*dt;mz-=fwdZ*spd*dt;}
+    if(keys['KeyA']||keys['ArrowLeft']){mx+=rgtX*spd*dt;mz+=rgtZ*spd*dt;}
+    if(keys['KeyD']||keys['ArrowRight']){mx-=rgtX*spd*dt;mz-=rgtZ*spd*dt;}
+    px+=mx;pz+=mz;
+    // Clamp to world
+    px=Math.max(-19,Math.min(19,px));pz=Math.max(-19,Math.min(19,pz));
+
+    // Jump
+    if((keys['Space']||keys['ArrowUp'])&&onGround){velY=8;onGround=false;}
+    velY-=20*dt;
+    py+=velY*dt;
+    const floor=getFloor(px,pz);
+    if(py<floor){py=floor;velY=0;onGround=true;}
+
+    camera.position.set(px,py,pz);
+    camera.rotation.y=yaw;camera.rotation.x=pitch;
+
+    /* Animate trains if in rail scenario */
+    if(scen>=1){
+      trainZ+=dt*6;if(trainZ>20)trainZ=-20;
+      // Rebuild train blocks - just update the group position instead
+      // (train is part of scenarioChunk, rebuild each few frames)
+      if(frame%90===0) buildScenario(scen);
+    }
+
+    /* Animate clouds */
+    clouds.forEach((c,i)=>{c.position.x+=dt*(0.4+i*0.1);if(c.position.x>60)c.position.x=-60;});
+
+    /* Day/night */
+    dayTime=(dayTime+dt*0.015)%1;
+    const noon=Math.sin(dayTime*Math.PI);
+    const skyC=new THREE.Color().lerpColors(skyColors.night,skyColors.day,Math.max(0,noon));
+    renderer.setClearColor(skyC);
+    scene.fog.color.copy(skyC);
+    sun.intensity=Math.max(0,noon*1.4);
+    sun.position.set(Math.cos(dayTime*Math.PI*2)*80,Math.sin(dayTime*Math.PI)*60,20);
+    stars.material.opacity=Math.max(0,1-noon*3);
+    scene.children.forEach(c=>{if(c.isAmbientLight)c.intensity=0.3+noon*0.5;});
+
+    /* Location label */
+    if(frame%30===0){
+      let lbl='Metro Manila';
+      LOCS.forEach(l=>{if(Math.sqrt((px-l.x)**2+(pz-l.z)**2)<6)lbl=l.label;});
+      document.getElementById('simLocLabel').textContent=lbl;
+    }
+
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  window.addEventListener('resize',()=>{
+    const nw=canvas.parentElement.clientWidth;
+    renderer.setSize(nw,H);camera.aspect=nw/H;camera.updateProjectionMatrix();
+  });
+})();
+</script>
+</body>
+</html>
